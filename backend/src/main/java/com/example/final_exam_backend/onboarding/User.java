@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 public class User {
     @Id
     @Column
-    public Long id;
+    public Integer id;
     @Column
     public String name;
     @Column

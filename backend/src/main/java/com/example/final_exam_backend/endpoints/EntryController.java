@@ -1,42 +1,67 @@
 package com.example.final_exam_backend.endpoints;
 
+import com.example.final_exam_backend.onboarding.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/entries")
 public class EntryController {
 
     @Autowired
-    private EntryService entryService;
+    private FoodEntryService foodEntryService;
 
-    @PostMapping("/food")
-    public ResponseEntity<Entry> addFoodEntry(@RequestBody Entry entry) {
-        Entry savedEntry = entryService.addFoodEntry(entry);
-        return ResponseEntity.created(URI.create("/api/food/" + savedEntry.getId())).body(savedEntry);
+    @Autowired
+    private WaterEntryService waterEntryService;
+
+    @Autowired
+    private WorkoutEntryService workoutEntryService;
+
+    @Autowired
+    private SleepEntryService sleepEntryService;
+
+    @GetMapping("/food")
+    public List<FoodEntry> getFoodEntries(@AuthenticationPrincipal User user) {
+        return foodEntryService.getEntries(user);
     }
 
-    @PostMapping("/sleep")
-    public ResponseEntity<Entry> addSleepEntry(@RequestBody Entry entry) {
-        Entry savedEntry = entryService.addSleepEntry(entry);
-        return ResponseEntity.created(URI.create("/api/sleep/" + savedEntry.getId())).body(savedEntry);
+    @PostMapping("/food")
+    public FoodEntry addFoodEntry(@RequestBody FoodEntry entry, @AuthenticationPrincipal User user) {
+        entry.setUser(user);
+        return foodEntryService.addEntry(entry);
+    }
+
+    @GetMapping("/water")
+    public List<WaterEntry> getWaterEntries(@AuthenticationPrincipal User user) {
+        return waterEntryService.getEntries(user);
     }
 
     @PostMapping("/water")
-    public ResponseEntity<Entry> addWaterEntry(@RequestBody Entry entry) {
-        Entry savedEntry = entryService.addWaterEntry(entry);
-        return ResponseEntity.created(URI.create("/api/water/" + savedEntry.getId())).body(savedEntry);
+    public WaterEntry addWaterEntry(@RequestBody WaterEntry entry, @AuthenticationPrincipal User user) {
+        entry.setUser(user);
+        return waterEntryService.addEntry(entry);
+    }
+
+    @GetMapping("/workout")
+    public List<WorkoutEntry> getWorkoutEntries(@AuthenticationPrincipal User user) {
+        return workoutEntryService.getEntries(user);
     }
 
     @PostMapping("/workout")
-    public ResponseEntity<Entry> addWorkoutEntry(@RequestBody Entry entry) {
-        Entry savedEntry = entryService.addWorkoutEntry(entry);
-        return ResponseEntity.created(URI.create("/api/workout/" + savedEntry.getId())).body(savedEntry);
+    public WorkoutEntry addWorkoutEntry(@RequestBody WorkoutEntry entry, @AuthenticationPrincipal User user){
+        return workoutEntryService.addEntry(entry);
+
+    }@GetMapping("/sleep")
+    public List<SleepEntry> getSleepEntries(@AuthenticationPrincipal User user) {
+        return sleepEntryService.getEntries(user);
+    }
+
+    @PostMapping("/sleep")
+    public SleepEntry addSleepEntry(@RequestBody SleepEntry entry, @AuthenticationPrincipal User user){
+        return sleepEntryService.addEntry(entry);
     }
 }
+

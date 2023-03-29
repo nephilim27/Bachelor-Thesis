@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -34,9 +35,9 @@ public class UserService {
         return (User) userRepository.findById(id).get();
     }
 
-    public ArrayList getAllUsers(){
+    public List<User> getAllUsers(){
 
-        return new ArrayList<>((Collection) userRepository.findAll());
+        return userRepository.findAll();
 
     }
 
