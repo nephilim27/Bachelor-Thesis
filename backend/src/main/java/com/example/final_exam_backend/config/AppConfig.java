@@ -3,6 +3,7 @@ package com.example.final_exam_backend.config;
 import com.example.final_exam_backend.endpoints.Entry;
 import com.example.final_exam_backend.endpoints.EntryRepository;
 import com.example.final_exam_backend.endpoints.EntryType;
+import com.example.final_exam_backend.endpoints.FoodEntry;
 import com.example.final_exam_backend.onboarding.User;
 import com.example.final_exam_backend.onboarding.UserRepository;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -179,6 +181,11 @@ public class AppConfig {
         return new EntryRepository() {
             @Override
             public List<Entry> findByUserAndType(User user, EntryType type) {
+                return null;
+            }
+
+            @Override
+            public List<FoodEntry> findByUserAndDate(User user, LocalDate date) {
                 return null;
             }
 

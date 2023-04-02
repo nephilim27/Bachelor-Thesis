@@ -9,14 +9,22 @@ spring:
 
 
   datasource:
-    url: jdbc:h2:mem:onboarding_data
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-    jpa:
-      database-platform: org.hibernate.dialect.H2Dialect
+    url: jdbc:postgresql://localhost:5432/calorie_tracker
+    username: postgres
+    password: mysecretpassword
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    properties:
       hibernate:
-        ddl-auto: update
-    h2:
-      console:
-        enabled: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+
+
+
+
+
