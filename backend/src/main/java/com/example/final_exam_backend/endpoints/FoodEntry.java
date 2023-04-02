@@ -26,5 +26,7 @@ public class FoodEntry extends Entry {
     @Column
     private Long userId;
 
-
+    public Integer getCalories() {
+        return calories;
+    }
 }

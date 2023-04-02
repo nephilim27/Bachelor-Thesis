@@ -5,11 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.security.KeyStore;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface EntryRepository extends JpaRepository<Entry, Long> {
 
     List<Entry> findByUserAndType(User user, EntryType type);
+    List<FoodEntry> findByUserAndDate(User user, LocalDate date);
 }
 
