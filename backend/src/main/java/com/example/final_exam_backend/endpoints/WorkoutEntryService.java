@@ -22,7 +22,7 @@ public class WorkoutEntryService implements EntryService<WorkoutEntry> {
     }
 
     @Override
-    public WorkoutEntry addEntry(WorkoutEntry entry) {
+    public WorkoutEntry addEntry(WorkoutEntry entry, Integer userId) {
         entry.setType(EntryType.FOOD);
         return entryRepository.save(entry);
     }

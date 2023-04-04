@@ -15,8 +15,8 @@ public class User {
     public String name;
     @Column
     public String email;
-    @Column
-    public String accessToken;
+//    @Column
+//    public String accessToken;
     @Column
     public double height;
     @Column

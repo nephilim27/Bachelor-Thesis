@@ -8,5 +8,5 @@ public interface EntryService<T extends Entry> {
 
     List<T> getEntries(User user);
 
-    T addEntry(T entry);
+    T addEntry(T entry, Integer userId);
 }

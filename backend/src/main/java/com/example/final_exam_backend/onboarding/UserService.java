@@ -31,7 +31,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User getUserById(Long id) {
+    public User getUserById(Integer id) {
         return (User) userRepository.findById(id).get();
     }
 
@@ -41,7 +41,7 @@ public class UserService {
 
     }
 
-    public User updateUser(Long id, User user) {
+    public User updateUser(Integer id, User user) {
         User existingUser = (User) userRepository.findById(id).get();
 
         existingUser.setName(user.getName());
@@ -55,7 +55,7 @@ public class UserService {
         return (User) userRepository.save(existingUser);
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
 }

@@ -22,7 +22,7 @@ public class SleepEntryService implements EntryService<SleepEntry> {
     }
 
     @Override
-    public SleepEntry addEntry(SleepEntry entry) {
+    public SleepEntry addEntry(SleepEntry entry, Integer userId) {
         entry.setType(EntryType.SLEEP);
         return entryRepository.save(entry);
     }

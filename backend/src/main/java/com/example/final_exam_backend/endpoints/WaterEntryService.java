@@ -22,7 +22,7 @@ public class WaterEntryService implements EntryService<WaterEntry> {
     }
 
     @Override
-    public WaterEntry addEntry(WaterEntry entry) {
+    public WaterEntry addEntry(WaterEntry entry, Integer userId) {
         entry.setType(EntryType.FOOD);
         return entryRepository.save(entry);
     }

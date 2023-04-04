@@ -1,19 +1,14 @@
 package com.example.final_exam_backend.endpoints;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import org.springframework.context.annotation.DeferredImportSelector;
+import jakarta.persistence.*;
 
-import javax.swing.*;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "FoodEntry")
 public class FoodEntry extends Entry {
     @Id
+    @GeneratedValue
     private Integer id;
     @Column
     private String name;

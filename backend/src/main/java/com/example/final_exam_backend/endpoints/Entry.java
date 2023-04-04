@@ -11,7 +11,7 @@ public class Entry {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
     private EntryType type;
@@ -23,7 +23,7 @@ public class Entry {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
     public EntryType getType() {

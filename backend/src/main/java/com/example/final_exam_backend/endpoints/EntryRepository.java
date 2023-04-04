@@ -4,7 +4,6 @@ import com.example.final_exam_backend.onboarding.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.security.KeyStore;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -12,6 +11,6 @@ import java.util.List;
 public interface EntryRepository extends JpaRepository<Entry, Long> {
 
     List<Entry> findByUserAndType(User user, EntryType type);
-    List<FoodEntry> findByUserAndDate(User user, LocalDate date);
+   // List<FoodEntry> findByUserAndDate(User user, LocalDate date);
 }
 
