@@ -5,8 +5,7 @@ import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 
-@Entity
-@Table(name = "entry")
+@MappedSuperclass
 public class Entry {
 
     @Id
@@ -20,7 +19,7 @@ public class Entry {
     private Timestamp dateTime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     public Integer getId() {

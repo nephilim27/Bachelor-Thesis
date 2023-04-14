@@ -39,6 +39,10 @@ public class AppConfig {
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.setProperty("hibernate.hbm2ddl.auto", "none");
         properties.setProperty("hibernate.format_sql", "true");
+        properties.setProperty("javax.persistence.schema-generation.database.action", "drop-and-create");
+        properties.setProperty("javax.persistence.schema-generation.scripts.action", "drop-and-create");
+        properties.setProperty("javax.persistence.schema-generation.scripts.create-target", "createDb.sql");
+        properties.setProperty("javax.persistence.schema-generation.scripts.drop-target", "dropDb.sql");
         return properties;
     }
 

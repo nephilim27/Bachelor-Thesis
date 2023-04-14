@@ -11,10 +11,6 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "SleepEntry")
 public class SleepEntry extends Entry {
-    @Id
-    private Integer id;
-    @Column
-    private Long userId;
     @Column
     private Timestamp duration;
     @Column

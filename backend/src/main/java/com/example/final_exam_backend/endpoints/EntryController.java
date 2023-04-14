@@ -16,19 +16,18 @@ public class EntryController {
     @Autowired
     private FoodEntryService foodEntryService;
 
-    @Autowired
-    private WaterEntryService waterEntryService;
-
-    @Autowired
-    private WorkoutEntryService workoutEntryService;
-
-    @Autowired
-    private SleepEntryService sleepEntryService;
+//    @Autowired
+//    private WaterEntryService waterEntryService;
+//
+//    @Autowired
+//    private WorkoutEntryService workoutEntryService;
+//
+//    @Autowired
+//    private SleepEntryService sleepEntryService;
 
     @GetMapping("/food")
     public List<FoodEntry> getFoodEntries(@RequestParam(value = "userId") Integer userId) {
-        User user = userService.getUserById(userId);
-        return foodEntryService.getEntries(user);
+        return foodEntryService.getEntries(userId);
     }
 
     @PostMapping("/food")

@@ -10,10 +10,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "WaterEntry")
 public class WaterEntry extends Entry{
-    @Id
-    private Integer id;
-    @Column
-    private Long userId;
+
     @Column
     private Integer amount;
     @Column

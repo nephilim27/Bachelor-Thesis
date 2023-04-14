@@ -10,12 +10,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "WorkoutEntry")
 public class WorkoutEntry extends Entry {
-    @Id
-    private Integer id;
     @Column
     private String category;
-    @Column
-    private Integer userId;
     @Column
     private Integer caloriesBurnt;
     @Column
