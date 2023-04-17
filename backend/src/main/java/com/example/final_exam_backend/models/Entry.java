@@ -1,9 +1,6 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.models;
 
-import com.example.final_exam_backend.onboarding.User;
 import jakarta.persistence.*;
-
-import java.sql.Timestamp;
 
 @MappedSuperclass
 public class Entry {
@@ -15,8 +12,8 @@ public class Entry {
     @Enumerated(EnumType.STRING)
     private EntryType type;
 
-    @Column(nullable = false)
-    private Timestamp dateTime;
+//    @Column(nullable = false)
+//    private LocalDateTime date;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
@@ -33,13 +30,6 @@ public class Entry {
         this.type = type;
     }
 
-    public Timestamp getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(Timestamp dateTime) {
-        this.dateTime = dateTime;
-    }
 
     public User getUser() {
         return user;

@@ -1,4 +1,4 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.models;
 
 public enum EntryType {
     FOOD,

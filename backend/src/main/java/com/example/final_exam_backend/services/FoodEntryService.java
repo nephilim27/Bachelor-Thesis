@@ -1,6 +1,9 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.services;
 
-import com.example.final_exam_backend.onboarding.UserRepository;
+import com.example.final_exam_backend.models.EntryType;
+import com.example.final_exam_backend.models.FoodEntry;
+import com.example.final_exam_backend.repos.FoodEntryRepository;
+import com.example.final_exam_backend.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

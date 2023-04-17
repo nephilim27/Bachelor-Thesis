@@ -1,4 +1,6 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.services;
+
+import com.example.final_exam_backend.models.Entry;
 
 import java.util.List;
 

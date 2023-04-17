@@ -1,20 +1,19 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 
 @Entity
 @Table(name = "SleepEntry")
 public class SleepEntry extends Entry {
     @Column
-    private Timestamp duration;
+    private LocalDateTime duration;
     @Column
-    private Timestamp completedAt;
+    private LocalDateTime completedAt;
 
 
 }

@@ -1,18 +1,17 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "WaterEntry")
-public class WaterEntry extends Entry{
+public class WaterEntry extends Entry {
 
     @Column
     private Integer amount;
     @Column
-    private Timestamp consumedAt;
+    private LocalDateTime consumedAt;
 }

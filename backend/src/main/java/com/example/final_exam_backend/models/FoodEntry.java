@@ -1,8 +1,10 @@
-package com.example.final_exam_backend.endpoints;
+package com.example.final_exam_backend.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
-import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "FoodEntry")
@@ -13,7 +15,7 @@ public class FoodEntry extends Entry {
     private Integer calories;
 
     @Column
-    private Timestamp consumedAt;
+    private LocalDate consumedAt;
 
     public Integer getCalories() {
         return calories;

@@ -1,5 +1,7 @@
-package com.example.final_exam_backend.onboarding;
+package com.example.final_exam_backend.services;
 
+import com.example.final_exam_backend.models.User;
+import com.example.final_exam_backend.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
