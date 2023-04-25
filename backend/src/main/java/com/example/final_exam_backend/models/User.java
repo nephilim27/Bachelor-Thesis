@@ -36,6 +36,10 @@ public class User {
     public String activityLevel;
     @Column
     public int weeklyGoal;
+    @Transient
+    public double calorieBudget;
+    @Transient
+    public double waterIntake;
     @Column
     public boolean finishedOnboarding;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
@@ -49,6 +53,28 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
     private List<WorkoutEntry> workoutEntries;
+
+    public double calculateCalorieBudget() {
+        if (this.getSex().equals("M")){
+            return 66.5 + (13.8 * this.getCurrentWeight()) + ((5 * this.getHeight()) / (6.8 * this.getAge()));
+        }
+        else if (this.getSex().equals("F")){
+            return 655.1 + (9.6 * this.getCurrentWeight()) + ((1.9 * this.getHeight()) / (4.7 * this.getAge()));
+        }
+
+        return 0;
+    }
+
+    public double calculateWaterIntake(){
+
+        return 35 * this.getCurrentWeight();
+    }
+
+    @PostLoad
+    public void postLoad(){
+        this.calorieBudget = calculateCalorieBudget();
+        this.waterIntake = calculateWaterIntake();
+    }
 
     public Integer getId() {
         return id;

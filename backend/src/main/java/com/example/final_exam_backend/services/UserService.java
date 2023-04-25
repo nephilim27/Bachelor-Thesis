@@ -12,21 +12,6 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-//    public double calculateCalorieBudget(User user) {
-//        if (user.sex.equals("Male")){
-//            return 66.5 + (13.8 * user.currentWeight) + ((5 * user.height) / (6.8 * user.age));
-//        }
-//        else if (user.sex.equals("Female")){
-//            return 655.1 + (9.6 * user.currentWeight) + ((1.9 * user.height) / (4.7 * user.age));
-//        }
-//
-//        return 0;
-//    }
-//
-//    public double calculateWaterIntake(User user){
-//
-//        return 0.35 * user.currentWeight;
-//    }
 
     public void saveUser(User user) {
         userRepository.save(user);
