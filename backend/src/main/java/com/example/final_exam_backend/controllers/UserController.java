@@ -1,20 +1,35 @@
 package com.example.final_exam_backend.controllers;
 
 import com.example.final_exam_backend.models.User;
+import com.example.final_exam_backend.repos.UserRepository;
 import com.example.final_exam_backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    UserRepository userRepository;
 
+//    @GetMapping("/onboarding")
+//    private List<User> getAllUsers(){
+//        return userService.getAllUsers();
+//    }
+//    @GetMapping("/onboarding/{id}")
+//    private User getUsers(@PathVariable("id") Integer id){
+//        return userService.getUserById(id);
+//    }
     @GetMapping("/onboarding")
-    private List<User> getAllUsers(){
+    private List<User> getAllUsers() {
         return userService.getAllUsers();
     }
     @GetMapping("/onboarding/{id}")
@@ -39,6 +54,33 @@ public class UserController {
 
         return user;
     }
+
+    @PutMapping("/onboarding/{id}")
+    public User updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User existingUser = optionalUser.get();
+
+            // Update the user information
+            existingUser.setName(updatedUser.getName());
+            existingUser.setEmail(updatedUser.getEmail());
+            existingUser.setAge(updatedUser.getAge());
+            existingUser.setSex(updatedUser.getSex());
+            existingUser.setHeight(updatedUser.getHeight());
+            existingUser.setCurrentWeight(updatedUser.getCurrentWeight());
+            existingUser.setActivityLevel(updatedUser.getActivityLevel());
+
+            // Save the updated user to the database
+            User savedUser = userRepository.save(existingUser);
+
+            return savedUser;
+        } else {
+            throw new NoSuchElementException("User with ID " + id + " not found");
+        }
+    }
+
+
 
     private boolean isValidUser(User user) {
         // Check required fields

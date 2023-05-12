@@ -4,7 +4,7 @@ export default function Navbar() {
     return (
       <nav className="nav">
         <ul>
-          <CustomLink to="/home"> HOME </CustomLink>
+          <CustomLink to="/"> HOME </CustomLink>
           <CustomLink to="/dashboard">DASHBOARD</CustomLink>
           <CustomLink to="/aboutus">ABOUT US</CustomLink>
           <CustomLink to="/profile">PROFILE</CustomLink>

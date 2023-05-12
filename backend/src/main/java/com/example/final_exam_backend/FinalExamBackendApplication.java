@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.util.Collections;
 
 @SpringBootApplication
-@ComponentScan({"com.example.final_exam_backend.controllers", "com.example.final_exam_backend.services", "com.example.final_exam_backend.repos"})
+@ComponentScan({"com.example.final_exam_backend.controllers", "com.example.final_exam_backend.services", "com.example.final_exam_backend.repos", "com.example.final_exam_backend.webconfig"})
 @EnableJpaRepositories({"com.example.final_exam_backend.repos"})
 @EntityScan({"com.example.final_exam_backend.models"})
 public class FinalExamBackendApplication {

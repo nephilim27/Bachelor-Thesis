@@ -25,19 +25,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-//    public User updateUser(Integer id, User user) {
-//        User existingUser = (User) userRepository.findById(id).get();
-//
-//        existingUser.setName(user.getName());
-//        existingUser.setEmail(user.getEmail());
-//        existingUser.setAge(user.getAge());
-//        existingUser.setSex(user.getSex());
-//        existingUser.setHeight(user.getHeight());
-//        existingUser.setCurrentWeight(user.getCurrentWeight());
-//        existingUser.setActivityLevel(user.getActivityLevel());
-//
-//        return (User) userRepository.save(existingUser);
-//    }
 
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
