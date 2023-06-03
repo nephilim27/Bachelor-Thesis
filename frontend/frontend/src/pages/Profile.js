@@ -32,18 +32,18 @@ function Profile() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(user), // Send the user data in the request body
+      body: JSON.stringify(user), 
     })
       .then((response) => response.json())
       .then((updatedUser) => {
-        // Handle successful update
         const updatedUserData = userData.map((u) => (u.id === updatedUser.id ? updatedUser : u));
-        setUserData(updatedUserData); // Update the state with the updated user data
-        setEditMode(false); // Exit edit mode
+        setUserData(updatedUserData); 
+        setEditMode(false); 
+        alert("Changes saved succesfully!")
       })
       .catch((error) => {
-        // Handle error during update
         console.log(error);
+        alert("Error saving changes!")
       });
   };
   
@@ -164,7 +164,7 @@ function Profile() {
           </>
         )}
         {editMode ? (
-          <button onClick={handleSaveChanges}>Save Changes</button>
+          <button onClick={handleSaveChanges}>Save</button>
         ) : (
           <button onClick={handleEditProfile}>Edit Profile</button>
         )}

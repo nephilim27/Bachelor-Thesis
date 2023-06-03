@@ -14,8 +14,8 @@ public class User {
     public String name;
     @Column
     public String email;
-//    @Column
-//    public String accessToken;
+    @Column
+    public String accessToken;
     @Column
     public double height;
     @Column
@@ -182,6 +182,14 @@ public class User {
 
     public void setFinishedOnboarding(boolean finishedOnboarding) {
         this.finishedOnboarding = finishedOnboarding;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }
 

@@ -5,7 +5,6 @@ import AboutUs from "./pages/AboutUs"
 import Profile from "./pages/Profile"
 import { Route, Routes } from "react-router-dom"
 
-
 function App() {
   return (
     <>

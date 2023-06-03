@@ -29,4 +29,10 @@ public class UserService {
     public void deleteUser(Integer id) {
         userRepository.deleteById(id);
     }
+
+    public boolean checkUserExistsByAccessToken(String accessToken) {
+        return userRepository.existsByAccessToken(accessToken);
+    }
+
+
 }
