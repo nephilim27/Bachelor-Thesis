@@ -161,6 +161,9 @@ function Profile() {
           <p>
           <strong>Activity Level:</strong> {user.activityLevel}
           </p>
+          <p>
+          <strong>Calorie Buget:</strong> {}
+          </p>
           </>
         )}
         {editMode ? (

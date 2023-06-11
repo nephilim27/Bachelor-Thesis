@@ -51,21 +51,20 @@ public class UserController {
         // User is not logged in or access token not found, return an error response
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access token not found");
     }
-    private boolean checkUserExists(String accessToken) {
-        List<User> users = existingApiCallToGetUsers();
-        return users.stream().anyMatch(user -> user.getAccessToken().equals(accessToken));
+    @GetMapping("/checkUserExistence")
+    public ResponseEntity<?> checkUserExistence(@RequestParam("email") String email) {
+        try {
+            boolean userExists = userRepository.existsByEmail(email);
+
+            // Send the response
+            return ResponseEntity.ok().body(userExists);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Internal Server Error");
+        }
     }
 
-    private List<User> existingApiCallToGetUsers() {
-        ResponseEntity<List<User>> response = restTemplate.exchange(
-                "http://localhost:8080/onboarding",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
-        return response.getBody();
-    }
+
 
     @GetMapping("/onboarding")
     private List<User> getAllUsers() {

@@ -188,4 +188,165 @@ button:hover {
   cursor: not-allowed;
 }
 
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+}
 
+.section-container {
+  display: flex;
+  flex-direction: flex;
+  align-items: start;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 400px;
+}
+
+.section-container h3 {
+  margin-bottom: 10px;
+}
+
+.food-entry-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 50px;
+}
+
+.overview-data {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.overview-details {
+  display: flex;
+  flex-direction: row; 
+}
+
+.overview-item {
+  font-size: small;
+}
+
+.circle-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid green;
+  margin-left: 70px;
+}
+
+.remaining-calories {
+  font-size: 16px;
+  text-align: center;
+  color: black;
+}
+
+.circle-container.decreasing-border {
+  border-width: calc(5px * (1 - remainingCalories / calorieBudget));
+}
+
+#date {
+  margin-left: 100px;
+  color: #777;
+}
+
+
+.FoodLog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.foodButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.WorkoutSection-container {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  width: 450px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.WorkoutSection-container h3 {
+  margin: 10px 0;
+  margin-left: 5px;
+}
+
+.plusWorkout {
+  margin: 10px 0;
+  margin-right: 5px;
+}
+
+.buttonsWorkout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitWorkout {
+  height: 50px;
+  width: 100px;
+  font-size: small;
+  margin-right: 10px;
+}
+.cancleWorkout {
+  height: 50px;
+  width: 100px;
+  margin-left: 10px;
+}
+
+.SleepSection-container {
+  position: absolute;
+  top: 100px;
+  right: 20px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  width: 400px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.SleepSection-container h3{
+  margin: 10px 0;
+  margin-left: 5px;
+}
+
+.plusSleep {
+  margin: 10px 0;
+  margin-right: 5px;
+}
