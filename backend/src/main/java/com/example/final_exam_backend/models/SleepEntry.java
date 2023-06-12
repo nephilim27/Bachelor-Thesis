@@ -4,16 +4,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 
 @Entity
 @Table(name = "SleepEntry")
 public class SleepEntry extends Entry {
     @Column
-    private LocalDateTime duration;
+    private Date duration;
     @Column
-    private LocalDateTime completedAt;
+    private Date completedAt;
 
 
 }

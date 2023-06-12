@@ -70,7 +70,7 @@ const Dashboard = () => {
     e.preventDefault();
 
     try {
-      const userId = 4; // Replace with the actual user ID
+      const userId = 1; // Replace with the actual user ID
       let entry = {};
 
       switch (section) {
@@ -155,7 +155,7 @@ const Dashboard = () => {
     e.preventDefault();
   
     try {
-      const userId = 4; // Replace with the actual user ID
+      const userId = 1; // Replace with the actual user ID
       let entry = {};
   
       switch (section) {
@@ -234,7 +234,7 @@ const handleSubmitSleep = async (e) => {
   e.preventDefault();
 
   try {
-    const userId = 4; // Replace with the actual user ID
+    const userId = 1; // Replace with the actual user ID
     const entry = {
       completed_at: currentDate,
       duration: parseFloat(sleepDuration)

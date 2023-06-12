@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "WaterEntry")
@@ -13,5 +13,5 @@ public class WaterEntry extends Entry {
     @Column
     private Integer amount;
     @Column
-    private LocalDateTime consumedAt;
+    private Date consumedAt;
 }

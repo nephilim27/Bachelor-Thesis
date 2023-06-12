@@ -13,6 +13,7 @@ export default function Navbar(props) {
                 authenticated &&
                 <>
                     <CustomLink to="/dashboard">DASHBOARD</CustomLink>
+                    <CustomLink to="/meals">MEALS</CustomLink>
                     <CustomLink to="/aboutus">ABOUT US</CustomLink>
                     <CustomLink to="/profile">PROFILE</CustomLink>
                 </>

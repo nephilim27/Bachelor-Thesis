@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "FoodEntry")
@@ -15,7 +15,7 @@ public class FoodEntry extends Entry {
     private Integer calories;
 
     @Column
-    private LocalDate consumedAt;
+    private Date consumedAt;
 
     public Integer getCalories() {
         return calories;
