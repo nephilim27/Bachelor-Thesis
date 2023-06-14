@@ -1,5 +1,6 @@
 package com.example.final_exam_backend.services;
 
+import com.example.final_exam_backend.models.Entry;
 import com.example.final_exam_backend.models.EntryType;
 import com.example.final_exam_backend.models.FoodEntry;
 import com.example.final_exam_backend.repos.FoodEntryRepository;
@@ -26,10 +27,15 @@ public class FoodEntryService implements EntryService<FoodEntry> {
 
     @Override
     public FoodEntry addEntry(FoodEntry entry, Integer userId) {
-        entry.setType(EntryType.FOOD);
+        FoodEntry newEntry = new FoodEntry();
+        newEntry.setType(EntryType.FOOD);
+        newEntry.setName(entry.getName());
+        newEntry.setCalories(entry.getCalories());
+        newEntry.setConsumedAt(newEntry.getConsumedAt());
         var user = userRepository.findById(userId).orElseThrow();
-        entry.setUser(user);
-        return foodEntryRepository.save(entry);
+        newEntry.setUser(user);
+        foodEntryRepository.save(newEntry);
+        return newEntry;
     }
 
 }

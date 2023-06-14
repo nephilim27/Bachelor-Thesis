@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
-const Dashboard = () => {
+const Dashboard = ( props ) => {
   const currentDate = new Date();
-  const [calorieBudget, setCalorieBudget] = useState(0);
   const [consumedCalories, setConsumedCalories] = useState(0);
   const [burntCalories, setBurntCalories] = useState(0);
+  var calorieBudget = props.calorieBudget;
 
   // Calculate the remaining calories
   const remainingCalories = calorieBudget - consumedCalories;
@@ -78,49 +77,32 @@ const Dashboard = () => {
           entry = {
             name: breakfastName,
             calories: parseInt(breakfastCalories),
-            consumedAt: new Date().toISOString(),
           };
-          setBreakfastName('');
-          setBreakfastCalories('');
-          setShowBreakfastForm(false);
           break;
         case 'lunch':
           entry = {
             name: lunchName,
             calories: parseInt(lunchCalories),
-            consumedAt: new Date().toISOString(),
           };
-          setLunchName('');
-          setLunchCalories('');
-          setShowLunchForm(false);
           break;
         case 'dinner':
           entry = {
             name: dinnerName,
             calories: parseInt(dinnerCalories),
-            consumedAt: new Date().toISOString(),
           };
-          setDinnerName('');
-          setDinnerCalories('');
-          setShowDinnerForm(false);
           break;
         case 'snack':
           entry = {
             name: snackName,
             calories: parseInt(snackCalories),
-            consumedAt: new Date().toISOString(),
           };
-          setSnackName('');
-          setSnackCalories('');
-          setShowSnackForm(false);
           break;
         default:
           return;
       }
 
       const response = await axios.post(
-        `http://localhost:8080/api/entries/food?user=${userId}`,
-        entry
+        `http://localhost:8080/api/entries/food?user=${userId}`, entry
       );
 
       console.log('Food entry added:', response.data);
@@ -163,23 +145,16 @@ const Dashboard = () => {
           entry = {
             name: workoutName,
             calories_burnt: caloriesBurntWorkout, 
-            completed_at: currentDate,
             duration: parseFloat(workoutDuration),
             category: workoutName, 
           };
-          setWorkoutName('');
-          setWorkoutDuration('');
-          setCaloriesBurntWorkout('');
-          setShowWorkoutForm(false);
-          setBurntCalories(burntCalories + caloriesBurntWorkout);
           break;
         default:
           return;
       }
   
       const response = await axios.post(
-        `http://localhost:8080/api/entries/workout?user=${userId}`,
-        entry
+        `http://localhost:8080/api/entries/workout?user=${userId}`, entry
       );
   
       console.log('Workout entry added:', response.data);
@@ -265,7 +240,7 @@ return (
       <div className='overview-details'>
         <div className='overview-data'>
           <div className="overview-item">
-            <p>Calorie Budget: {calorieBudget}</p>
+          <p>Calorie Budget: {calorieBudget}</p>
           </div>
           <div className="overview-item">
             <p>Consumed calories: {consumedCalories}</p>

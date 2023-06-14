@@ -1,26 +1,51 @@
 import React, { useEffect, useState } from 'react';
+import Dashboard from './Dashboard';
 
 function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState([]);
   const [user, setUser] = useState({});
+  const [calorieBudget, setCalorieBudget] = useState(0);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   useEffect(() => {
     fetch(`http://localhost:8080/onboarding?timestamp=${Date.now()}`)
-    .then((response) => response.json())
-    .then((data) => {
-    setUserData(data);
-    setUser(data[0]);
-  })
-  .catch((error) => {
-    console.error('Error retrieving user data:', error);
-  });
-
+      .then((response) => response.json())
+      .then((data) => {
+        setUserData(data);
+        setUser(data[0]);
+        setDataLoaded(true);
+      })
+      .catch((error) => {
+        console.error('Error retrieving user data:', error);
+      });
   }, []);
+
+  useEffect(() => {
+    if (dataLoaded && user && user.sex && user.currentWeight && user.height && user.age) {
+      if (user.sex === 'M') {
+        setCalorieBudget(
+          66.5 +
+            13.8 * user.currentWeight +
+            (5 * user.height) / (6.8 * user.age)
+        );
+      } else if (user.sex === 'F') {
+        setCalorieBudget(
+           655.1 +
+            9.6 * user.currentWeight +
+            (1.9 * user.height) / (4.7 * user.age)
+        );
+      }
+    }
+  }, [dataLoaded, user]);
 
   if (userData.length === 0) {
     return <div>Loading...</div>;
   }
+
+
+  
+
 
   const handleEditProfile = () => {
     setEditMode(!editMode);
@@ -162,8 +187,11 @@ function Profile() {
           <strong>Activity Level:</strong> {user.activityLevel}
           </p>
           <p>
-          <strong>Calorie Buget:</strong> {}
+          <strong>Calorie Buget:</strong> {parseInt(calorieBudget)}
           </p>
+          <div style={{ display: 'none' }}>
+            <Dashboard calorieBudget={calorieBudget} />
+          </div>
           </>
         )}
         {editMode ? (

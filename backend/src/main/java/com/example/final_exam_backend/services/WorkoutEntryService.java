@@ -1,6 +1,7 @@
 package com.example.final_exam_backend.services;
 
 import com.example.final_exam_backend.models.EntryType;
+import com.example.final_exam_backend.models.FoodEntry;
 import com.example.final_exam_backend.models.WorkoutEntry;
 import com.example.final_exam_backend.repos.UserRepository;
 import com.example.final_exam_backend.repos.WorkoutEntryRepository;
@@ -26,9 +27,17 @@ public class WorkoutEntryService implements EntryService<WorkoutEntry> {
 
     @Override
     public WorkoutEntry addEntry(WorkoutEntry entry, Integer userId) {
-        entry.setType(EntryType.WORKOUT);
+        WorkoutEntry newEntry = new WorkoutEntry();
+
+        newEntry.setType(EntryType.WORKOUT);
+        newEntry.setCaloriesBurnt(newEntry.getCaloriesBurnt());
+        newEntry.setCategory(newEntry.getCategory());
+        newEntry.setDuration(newEntry.getDuration());
+
         var user = userRepository.findById(userId).orElseThrow();
-        entry.setUser(user);
-        return workoutEntryRepository.save(entry);
+        newEntry.setUser(user);
+
+        workoutEntryRepository.save(newEntry);
+        return newEntry;
     }
 }

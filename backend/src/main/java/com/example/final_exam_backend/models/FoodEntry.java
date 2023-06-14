@@ -1,8 +1,7 @@
 package com.example.final_exam_backend.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -15,9 +14,30 @@ public class FoodEntry extends Entry {
     private Integer calories;
 
     @Column
+    @CreationTimestamp
     private Date consumedAt;
 
     public Integer getCalories() {
         return calories;
+    }
+
+    public void setCalories(Integer calories) {
+        this.calories = calories;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getConsumedAt() {
+        return consumedAt;
+    }
+
+    public void setConsumedAt(Date consumedAt) {
+        this.consumedAt = consumedAt;
     }
 }

@@ -23,6 +23,8 @@ import CaliFlowerSoup from "./meals/CaliFlowerSoup"
 import CaliforniaRollSalad from "./meals/CaliforniaRollSalad"
 import Shakshuka from "./meals/Shakshuka"
 
+import React, { useState } from 'react';
+
 function App() {
 
     const {authenticated} = useAuthentication();
@@ -65,8 +67,12 @@ function App() {
             />
         </Routes>
       </div>
+      
     </>
+
+    
   )
+
 }
 
 export default App;
