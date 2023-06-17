@@ -1,80 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import Dashboard from './Dashboard';
+import { useAuthentication } from '../providers/AuthProvider';
 
 function Profile() {
   const [editMode, setEditMode] = useState(false);
-  const [userData, setUserData] = useState([]);
-  const [user, setUser] = useState({});
   const [calorieBudget, setCalorieBudget] = useState(0);
-  const [dataLoaded, setDataLoaded] = useState(false);
-
-  useEffect(() => {
-    fetch(`http://localhost:8080/onboarding?timestamp=${Date.now()}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setUserData(data);
-        setUser(data[0]);
-        setDataLoaded(true);
-      })
-      .catch((error) => {
-        console.error('Error retrieving user data:', error);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (dataLoaded && user && user.sex && user.currentWeight && user.height && user.age) {
-      if (user.sex === 'M') {
-        setCalorieBudget(
-          66.5 +
-            13.8 * user.currentWeight +
-            (5 * user.height) / (6.8 * user.age)
-        );
-      } else if (user.sex === 'F') {
-        setCalorieBudget(
-           655.1 +
-            9.6 * user.currentWeight +
-            (1.9 * user.height) / (4.7 * user.age)
-        );
-      }
-    }
-  }, [dataLoaded, user]);
-
-  if (userData.length === 0) {
-    return <div>Loading...</div>;
-  }
-
-
-  
-
+  const { profile, onBoardedUser, setOnBoardedUserState } = useAuthentication();
 
   const handleEditProfile = () => {
     setEditMode(!editMode);
   };
 
   const handleSaveChanges = () => {
-    fetch(`http://localhost:8080/onboarding/${user.id}`, {
+    fetch(`http://localhost:8080/onboarding/${onBoardedUser.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(user), 
+      body: JSON.stringify(onBoardedUser),
     })
       .then((response) => response.json())
       .then((updatedUser) => {
-        const updatedUserData = userData.map((u) => (u.id === updatedUser.id ? updatedUser : u));
-        setUserData(updatedUserData); 
-        setEditMode(false); 
-        alert("Changes saved succesfully!")
+        setEditMode(false);
+        alert('Changes saved successfully!');
       })
       .catch((error) => {
         console.log(error);
-        alert("Error saving changes!")
+        alert('Error saving changes!');
       });
   };
-  
-  const handleInputChange = e => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setOnBoardedUserState((prevUser) => ({ ...prevUser, [name]: value }));
   };
+  
 
   return (
     <div className="profile-container">
@@ -84,114 +43,76 @@ function Profile() {
       <div className="user-info">
         {editMode ? (
           <div className="input-fields">
-          <input
-            type="text"
-            name="name"
-            value={user.name}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="email"
-            value={user.email}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="height"
-            value={user.height}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="sex"
-            value={user.sex}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="age"
-            value={user.age}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="birthDate"
-            value={user.birthDate}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="currentWeight"
-            value={user.currentWeight}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="startWeight"
-            value={user.startWeight}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="goalWeight"
-            value={user.goalWeight}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="goalDate"
-            value={user.goalDate}
-            onChange={handleInputChange}
-          />
-          <input
-            type="text"
-            name="activityLevel"
-            value={user.activityLevel}
-            onChange={handleInputChange}
-          />
-        </div>
+            <input
+              type="text"
+              name="name"
+              value={onBoardedUser.name}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="email"
+              value={onBoardedUser.email}
+              onChange={handleInputChange}
+            />
+            <input
+              type="number"
+              name="height"
+              value={onBoardedUser.height}
+              onChange={handleInputChange}
+            />
+            <input
+              type="number"
+              name="startWight"
+              value={onBoardedUser.startWeight}
+              onChange={handleInputChange}
+            />
+            <input
+              type="number"
+              name="goalWeight"
+              value={onBoardedUser.goalWeight}
+              onChange={handleInputChange}
+            />
+            <input
+              type="date"
+              name="goalDate"
+              value={onBoardedUser.goalDate}
+              onChange={handleInputChange}
+            />
+            <input
+              type="text"
+              name="activityLevel"
+              value={onBoardedUser.activityLevel}
+              onChange={handleInputChange}
+            />
+          </div>
         ) : (
           <>
+            <img src={profile.picture} alt='profilePic' />
             <p>
-              <strong>Name:</strong> {user.name}
+              <strong>Name:</strong> {onBoardedUser.name}
             </p>
             <p>
-              <strong>Email:</strong> {user.email}
+              <strong>Email:</strong> {onBoardedUser.email}
             </p>
             <p>
-              <strong>Height:</strong> {user.height}
-            </p>
-            <p>
-              <strong>Sex:</strong> {user.sex}
-            </p>
-            <p>
-              <strong>Age:</strong> {user.age}
-            </p>
-            <p>
-              <strong>Birth Date:</strong> {user.birthDate}
-            </p>
-            <p>
-              <strong>Current Weight:</strong> {user.currentWeight}
-            </p>
-            <p>
-              <strong>Start Weight:</strong> {user.startWeight}
-            </p>
-            <p>
-          <strong>Goal Weight:</strong> {user.goalWeight}
-          </p>
-          <p>
-          <strong>Goal Date:</strong> {user.goalDate}
-          </p>
-          <p>
-          <strong>Activity Level:</strong> {user.activityLevel}
-          </p>
-          <p>
-          <strong>Calorie Buget:</strong> {parseInt(calorieBudget)}
-          </p>
-          <div style={{ display: 'none' }}>
-            <Dashboard calorieBudget={calorieBudget} />
-          </div>
+              <strong>Height:</strong> {onBoardedUser.height}
+             </p>
+             <p>
+               <strong>Start Weight:</strong> {onBoardedUser.startWeight}
+             </p>
+             <p>
+           <strong>Goal Weight:</strong> {onBoardedUser.goalWeight}
+           </p>
+           <p>
+           <strong>Goal Date:</strong> {onBoardedUser.goalDate}
+           </p>
+           <p>
+           <strong>Activity Level:</strong> {onBoardedUser.activityLevel}
+           </p>
+           <p>
+           <strong>Calorie Budget:</strong> {parseInt(onBoardedUser.calorieBudget)}
+           </p>
           </>
         )}
         {editMode ? (

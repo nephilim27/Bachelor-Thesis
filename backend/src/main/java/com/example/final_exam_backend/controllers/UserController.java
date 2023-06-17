@@ -1,5 +1,6 @@
 package com.example.final_exam_backend.controllers;
 
+import com.example.final_exam_backend.models.FoodEntry;
 import com.example.final_exam_backend.models.User;
 import com.example.final_exam_backend.repos.UserRepository;
 import com.example.final_exam_backend.services.UserService;
@@ -15,6 +16,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.web.client.RestTemplate;
 
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -26,15 +28,6 @@ public class UserController {
     UserService userService;
     @Autowired
     UserRepository userRepository;
-
-//    @GetMapping("/access-token")
-//    public ResponseEntity<String> checkUserExistence(@RequestParam String accessToken) {
-//        boolean exists = checkUserExists(accessToken);
-//        if (exists){
-//            return ResponseEntity.ok(accessToken);
-//        }
-//        return null;
-//    }
 
     @GetMapping("/access-token")
     public ResponseEntity<String> getAccessToken(HttpServletRequest request) {
@@ -63,7 +56,6 @@ public class UserController {
             return ResponseEntity.status(500).body("Internal Server Error");
         }
     }
-
 
 
     @GetMapping("/onboarding")

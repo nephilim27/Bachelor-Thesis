@@ -10,6 +10,7 @@ export const AuthContext = createContext({
     setAuthenticated: () => console.log,
     deleteToken: () => console.log,
     logout: () => console.log,
+    setOnBoardedUser: () => console.log,
 })
 export const AuthProvider = ({
     children,
@@ -18,6 +19,9 @@ export const AuthProvider = ({
     const [onboardingCompleted, setOnboardingCompleted] = useState(false);
     const [profile, setProfile] = useState({});
     const [user, setUser] = useState({});
+    const [onBoardedUser, setOnBoardedUser] = useState({});
+    const [userData, setUserData] = useState([]);
+
     const setAuthStates = (user) => {
         setUser(user)
         setAuthenticated(true)
@@ -61,6 +65,19 @@ export const AuthProvider = ({
             .catch((err) => console.log(err));
     }, [authenticated]);
 
+    useEffect(() => {
+        fetch(`http://localhost:8080/onboarding?timestamp=${Date.now()}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setUserData(data[0]);
+            setOnBoardedUser(data[0]);
+            setProfile(data[0]);
+          })
+          .catch((error) => {
+            console.error('Error retrieving user data:', error);
+          });
+      }, []);
+
     return (
         <AuthContext.Provider value={{
             authenticated: authenticated,
@@ -68,11 +85,13 @@ export const AuthProvider = ({
             logout:logout,
             login:login,
             user: user,
+            onBoardedUser: onBoardedUser,
             profile: profile,
             onboardingCompleted: onboardingCompleted
         }}>
             {children}
         </AuthContext.Provider>
     );
+
 };
 export const useAuthentication = () => useContext(AuthContext);

@@ -8,14 +8,17 @@ import java.util.Date;
 @Entity
 @Table(name = "FoodEntry")
 public class FoodEntry extends Entry {
-    @Column
+    @Column(nullable = false)
     private String name;
-    @Column
+    @Column(nullable = false)
     private Integer calories;
 
     @Column
     @CreationTimestamp
     private Date consumedAt;
+
+    @Column
+    private String mealType;
 
     public Integer getCalories() {
         return calories;
@@ -39,5 +42,13 @@ public class FoodEntry extends Entry {
 
     public void setConsumedAt(Date consumedAt) {
         this.consumedAt = consumedAt;
+    }
+
+    public String getMealType() {
+        return mealType;
+    }
+
+    public void setMealType(String mealType) {
+        this.mealType = mealType;
     }
 }

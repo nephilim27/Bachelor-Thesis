@@ -43,4 +43,8 @@ public class WorkoutEntry extends Entry {
     public void setDuration(double duration) {
         this.duration = duration;
     }
+
+    public Date getCompletedAt() {
+        return completedAt;
+    }
 }

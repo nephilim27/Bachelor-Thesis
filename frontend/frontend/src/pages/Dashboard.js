@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-const Dashboard = ( props ) => {
+import FoodSearch from './FoodSearch';
+import { useAuthentication } from '../providers/AuthProvider';
+import classNames from 'classnames';
+
+
+
+const Dashboard = ( ) => {
   const currentDate = new Date();
   const [consumedCalories, setConsumedCalories] = useState(0);
   const [burntCalories, setBurntCalories] = useState(0);
-  var calorieBudget = props.calorieBudget;
+  const [calorieBudget, setCalorieBudget] = useState(0);
 
-  // Calculate the remaining calories
-  const remainingCalories = calorieBudget - consumedCalories;
+  const { onBoardedUser } = useAuthentication();
 
-  // Calculate the percentage of consumed calories
-  const consumedPercentage = (consumedCalories / calorieBudget) * 100;
+  const [breakfastEntries, setBreakfastEntries] = useState([]);
+  const [lunchEntries, setLunchEntries] = useState([]);
+  const [dinnerEntries, setDinnerEntries] = useState([]);
+  const [snackEntries, setSnackEntries] = useState([]);
+  const [foodEntries, setFoodEntries] = useState([]);
+  const [workoutEntries, setWorkoutEntries] = useState([]);
+  const [waterEntries, setWaterEntries] = useState([]);
+  const [sleepEntries, setSleepEntries] = useState([]);
 
-  // Determine the appropriate class for the circle container
-  const circleContainerClass = consumedPercentage >= 100 ? 'circle-container full' : 'circle-container partial';
-  
+  // Calculate the overage amount
+  const overage = consumedCalories - (parseInt(onBoardedUser.calorieBudget) + burntCalories);
 
+  // Determine the remaining calories value based on the overage
+  const remainingCalories = overage > 0 ? `${overage} over` : `${Math.abs(overage)} remaining`;
+
+  // Determine the class for the circle container based on the overage
+  const circleContainerClass = overage > 500 ? 'circle-container-red' : overage > 0 && overage < 500 ? 'circle-container-orange' : 'circle-container';
 
   const [breakfastName, setBreakfastName] = useState('');
   const [breakfastCalories, setBreakfastCalories] = useState('');
@@ -65,11 +80,12 @@ const Dashboard = ( props ) => {
     setSnackCalories(e.target.value);
   };
 
+
   const handleSubmit = async (e, section) => {
     e.preventDefault();
 
     try {
-      const userId = 1; // Replace with the actual user ID
+      const userId = onBoardedUser.id;
       let entry = {};
 
       switch (section) {
@@ -77,24 +93,28 @@ const Dashboard = ( props ) => {
           entry = {
             name: breakfastName,
             calories: parseInt(breakfastCalories),
+            mealType: 'breakfast',
           };
           break;
         case 'lunch':
           entry = {
             name: lunchName,
             calories: parseInt(lunchCalories),
+            mealType: 'lunch',
           };
           break;
         case 'dinner':
           entry = {
             name: dinnerName,
             calories: parseInt(dinnerCalories),
+            mealType: 'dinner',
           };
           break;
         case 'snack':
           entry = {
             name: snackName,
             calories: parseInt(snackCalories),
+            mealType: 'snack',
           };
           break;
         default:
@@ -133,25 +153,18 @@ const Dashboard = ( props ) => {
     }
   };
 
-  const handleSubmitWorkout = async (e, section) => {
+  const handleSubmitWorkout = async (e) => {
     e.preventDefault();
   
     try {
-      const userId = 1; // Replace with the actual user ID
+      const userId = onBoardedUser.id;
       let entry = {};
   
-      switch (section) {
-        case 'workout':
-          entry = {
-            name: workoutName,
-            calories_burnt: caloriesBurntWorkout, 
-            duration: parseFloat(workoutDuration),
-            category: workoutName, 
-          };
-          break;
-        default:
-          return;
-      }
+      entry = {
+        caloriesBurnt: caloriesBurntWorkout, 
+        category: workoutName, 
+        duration: workoutDuration
+      };
   
       const response = await axios.post(
         `http://localhost:8080/api/entries/workout?user=${userId}`, entry
@@ -159,7 +172,6 @@ const Dashboard = ( props ) => {
   
       console.log('Workout entry added:', response.data);
       alert('Workout entry added');
-      // Perform any necessary state updates or calculations
     } catch (error) {
       console.error('Error adding workout entry:', error);
       alert('Error adding workout entry');
@@ -209,10 +221,9 @@ const handleSubmitSleep = async (e) => {
   e.preventDefault();
 
   try {
-    const userId = 1; // Replace with the actual user ID
+    const userId = onBoardedUser.id; 
     const entry = {
-      completed_at: currentDate,
-      duration: parseFloat(sleepDuration)
+      duration: parseInt(sleepDuration)
     };
     setSleepDuration(0);
 
@@ -230,6 +241,187 @@ const handleSubmitSleep = async (e) => {
   }
 };
 
+//Get BreakfastEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=breakfast`)
+    .then((response) => response.json())
+    .then((data) => {
+      setBreakfastEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get LunchEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=lunch`)
+    .then((response) => response.json())
+    .then((data) => {
+      setLunchEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get DinnerEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=dinner`)
+    .then((response) => response.json())
+    .then((data) => {
+      setDinnerEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get SnackEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=snack`)
+    .then((response) => response.json())
+    .then((data) => {
+      setSnackEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get all FoodEntries on current day
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsOnGivenDay?userId=${onBoardedUser.id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      setFoodEntries(data);
+      
+      // Calculate total calories
+      const totalCalories = data.reduce((total, entry) => total + entry.calories, 0);
+      setConsumedCalories(totalCalories);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]);
+
+
+
+const [totalWaterAmount, setTotalWaterAmount] = useState(0);
+
+useEffect(() => {
+  const fetchWaterEntries = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/entries/waterOnGivenDay?userId=${onBoardedUser.id}`);
+      setWaterEntries(response.data);
+    } catch (error) {
+      console.error('Error fetching water entries:', error);
+    }
+  };
+
+  fetchWaterEntries();
+}, [onBoardedUser.id]);
+
+useEffect(() => {
+  // Calculate the total sum of water amounts
+  let totalAmount = 0;
+  waterEntries.forEach((entry) => {
+    totalAmount += entry.amount;
+  });
+  setTotalWaterAmount(totalAmount);
+}, [waterEntries]);
+
+
+//Get WorkoutEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/workoutOnGivenDay?userId=${onBoardedUser.id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      setWorkoutEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching workout entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+
+const [totalBurntCaloriesAmount, setTotalBurntCaloriesAmount] = useState(0);
+
+useEffect(() => {
+  // Calculate the total sum of burnt calories amounts
+  let totalCaloriesAmount = 0;
+  workoutEntries.forEach((entry) => {
+    totalCaloriesAmount += entry.caloriesBurnt;
+  });
+  setTotalBurntCaloriesAmount(totalCaloriesAmount);
+  setBurntCalories(totalBurntCaloriesAmount);
+}, [workoutEntries]);
+
+//Get SleepEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/sleepOnGivenDay?userId=${onBoardedUser.id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      setSleepEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching sleep entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+
+const handleDeleteEntry = (entryId) => {
+  // Send a DELETE request to the API endpoint
+  fetch(`http://localhost:8080/api/entries/${entryId}`, {
+    method: 'DELETE'
+  })
+  .then((response) => {
+    if (response.ok) {
+      // If the deletion is successful, remove the entry from the screen
+      setFoodEntries((prevEntries) => prevEntries.filter(entry => entry.id !== entryId));
+    } else {
+      console.error('Error deleting food entry');
+    }
+  })
+  .catch((error) => {
+    console.error('Error deleting food entry:', error);
+  });
+};
+
+const [selectedAmount, setSelectedAmount] = useState(null);
+const [showForm, setShowForm] = useState(false);
+
+const handleLogWaterEntry = async (amount) => {
+  try {
+    const userId = onBoardedUser.id;
+    const entry = {
+      amount: amount,
+    };
+
+    const response = await axios.post(
+      `http://localhost:8080/api/entries/water?user=${userId}`,
+      entry
+    );
+
+    console.log('Water entry added:', response.data);
+    alert('Water entry added');
+  } catch (error) {
+    console.error('Error adding water entry:', error);
+    alert('Error adding water entry');
+  }
+  console.log(`Logged water entry: ${amount}ml`);
+
+  // Reset the selected amount
+  setSelectedAmount(null);
+};
+
+
+const handleToggleFormWater = () => {
+  setShowForm(!showForm);
+  setSelectedAmount(null);
+};
+
+
 
 return (
   <div className="dashboard-container">
@@ -240,7 +432,7 @@ return (
       <div className='overview-details'>
         <div className='overview-data'>
           <div className="overview-item">
-          <p>Calorie Budget: {calorieBudget}</p>
+          <p>Calorie Budget: {parseInt(onBoardedUser.calorieBudget) + burntCalories}</p>
           </div>
           <div className="overview-item">
             <p>Consumed calories: {consumedCalories}</p>
@@ -249,9 +441,10 @@ return (
             <p>Burnt calories: {burntCalories}</p>
           </div>
         </div>
-        <div className={circleContainerClass}>
-          <span className="remaining-calories">{remainingCalories} <br/> Remaining</span>
+        <div className={`circle-container ${circleContainerClass}`}>
+          <span className="remaining-calories">{remainingCalories}</span>
         </div>
+
       </div>
     </div>
 
@@ -260,8 +453,27 @@ return (
       <div className="section-container">
         <h3>Breakfast</h3>
         {!showBreakfastForm ? (
-          <button onClick={() => handleToggleForm('breakfast')}>+</button>
+          <div>
+          <button className='plusB' onClick={() => handleToggleForm('breakfast')}>+</button>
+          <div className='foodEntries'>
+            {breakfastEntries.map((entry) => (
+              <div key={entry.id} className='foodEntry'>
+                <p className='entryName'> {entry.name}</p>
+                <p className='entryCalories'><b>{entry.calories}</b> calories</p>
+                <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
+              </div>
+            ))}
+          </div>
+ 
+          
+  </div>
         ) : (
+          <div className='breakfastForms'>
+            <h2> Log food:</h2>
+          <FoodSearch section={'breakfast'}/>
+
+          <br />
+          <h2> Log Custom food:</h2>
           <form
             onSubmit={(e) => handleSubmit(e, 'breakfast')}
             className="food-entry-form"
@@ -289,14 +501,33 @@ return (
               Cancel
             </button>
           </form>
+          </div>
         )}
       </div>
 
       <div className="section-container">
         <h3>Lunch</h3>
         {!showLunchForm ? (
-          <button onClick={() => handleToggleForm('lunch')}>+</button>
+        <div>
+          <button className='plusL' onClick={() => handleToggleForm('lunch')}>+</button>
+
+          <div className='foodEntries'>
+            {lunchEntries.map((entry) => (
+              <div key={entry.id} className='foodEntry'>
+                <p className='entryName'> {entry.name}</p>
+                <p className='entryCalories'><b>{entry.calories}</b> calories</p>
+                <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
+              </div>
+            ))}
+          </div>
+        </div>
         ) : (
+          <div className='lunchForms'>
+            <h2> Log food:</h2>
+          <FoodSearch section={'lunch'}/>
+
+          <br />
+          <h2> Log Custom food:</h2>
           <form
             onSubmit={(e) => handleSubmit(e, 'lunch')}
             className="food-entry-form"
@@ -322,16 +553,34 @@ return (
             <button type="submit">Log Food</button>
             <button onClick={() => handleToggleForm('lunch')}>Cancel</button>
           </form>
+          </div>
         )}
       </div>
     </div>
+    
 
     <div className="section-row">
       <div className="section-container">
         <h3>Dinner</h3>
         {!showDinnerForm ? (
-          <button onClick={() => handleToggleForm('dinner')}>+</button>
+          <div>
+            <button className='plusD' onClick={() => handleToggleForm('dinner')}>+</button>
+
+            <div className='foodEntries'>
+              {dinnerEntries.map((entry) => (
+                <div key={entry.id} className='foodEntry'>
+                  <p className='entryName'> {entry.name}</p>
+                  <p className='entryCalories'><b>{entry.calories}</b> calories</p>
+                  <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
+                </div>
+              ))}
+            </div>
+          </div>
         ) : (
+          <div className='dinnerForms'>
+            <h2> Log food:</h2>
+            <FoodSearch section={'dinner'}/>
+            <br />
           <form
             onSubmit={(e) => handleSubmit(e, 'dinner')}
             className="food-entry-form"
@@ -357,14 +606,31 @@ return (
             <button type="submit">Log Food</button>
             <button onClick={() => handleToggleForm('dinner')}>Cancel</button>
           </form>
+          </div>
         )}
       </div>
 
       <div className="section-container">
         <h3>Snack</h3>
         {!showSnackForm ? (
+          <div>
           <button onClick={() => handleToggleForm('snack')}>+</button>
+
+          <div className='foodEntries'>
+            {snackEntries.map((entry) => (
+              <div key={entry.id} className='foodEntry'>
+                <p className='entryName'> {entry.name}</p>
+                <p className='entryCalories'><b>{entry.calories}</b> calories</p>
+                <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
+              </div>
+            ))}
+          </div>
+        </div>
         ) : (
+          <div className='snackForms'>
+            <h2> Log food:</h2>
+            <FoodSearch section={'snack'}/>
+            <br />
           <form
             onSubmit={(e) => handleSubmit(e, 'snack')}
             className="food-entry-form"
@@ -390,6 +656,7 @@ return (
             <button type="submit">Log Food</button>
             <button onClick={() => handleToggleForm('snack')}>Cancel</button>
           </form>
+          </div>
         )}
       </div>
     </div>
@@ -397,10 +664,22 @@ return (
   <div className="WorkoutSection-container">
       <h3>Workout</h3>
       {!showWorkoutForm ? (
+        <div>
         <button className='plusWorkout' onClick={() => handleToggleFormWorkout('workout')}>+</button>
+        <div className='foodEntries'>
+            {workoutEntries.map((entry) => (
+              <div key={entry.id} className='foodEntry'>
+                <p className='entryName'> {entry.category}</p>
+                <p className='entryCalories'>{entry.duration} minutes</p>
+                <p className='entryCalories'>{entry.caloriesBurnt} calories</p>
+                <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
+              </div>
+            ))}
+          </div>
+          </div>
         ) : (
           <form
-            onSubmit={(e) => handleSubmitWorkout(e, 'workout')}
+            onSubmit={(e) => handleSubmitWorkout(e)}
             className="workout-entry-form"
           >
             <div className="form-group">
@@ -440,34 +719,76 @@ return (
   </div>
 
   <div className='SleepSection-container'>
-  <h3>Sleep</h3>
-      {!showSleepForm ? (
-        <button className='plusSleep' onClick={() => handleToggleFormSleep('sleep')}>+</button>
-        ) : (
-          <form
-            onSubmit={(e) => handleSubmitSleep(e, 'sleep')}
-            className="sleep-entry-form"
-          >
-            <div className="form-group">
-              <label htmlFor="sleep-duration">Duration (in minutes):</label>
-              <input
-                type="number"
-                id="sleep-duration"
-                value={sleepDuration}
-                onChange={handleSleepDurationChange}
-              />
-            </div>
-            <div className='buttonsWorkout'>
-              <button className='submitWorkout' type="submit">Log Sleep</button>
-              <button className='cancleWorkout' onClick={() => handleToggleFormSleep('sleep')}>Cancel</button>
-            </div>
-            
-          </form>
-      )}
+    <h3>Sleep</h3>
+        {!showSleepForm ? (
+          <div>
+          <button className='plusSleep' onClick={() => handleToggleFormSleep('sleep')}>+</button>
+          <div className='foodEntries'>
+            {sleepEntries.map((entry) => (
+              <div key={entry.id} className='foodEntry'>
+                <p className='entryCalories'>{entry.duration} hours</p>
+                <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
+              </div>
+            ))}
+          </div>
+          </div>
+          ) : (
+            <form
+              onSubmit={(e) => handleSubmitSleep(e, 'sleep')}
+              className="sleep-entry-form"
+            >
+              <div className="form-group">
+                <label htmlFor="sleep-duration">Duration (hours):</label>
+                <input
+                  type="number"
+                  id="sleep-duration"
+                  value={sleepDuration}
+                  onChange={handleSleepDurationChange}
+                />
+              </div>
+              <div className='buttonsWorkout'>
+                <button className='submitWorkout' type="submit">Log Sleep</button>
+                <button className='cancleWorkout' onClick={() => handleToggleFormSleep('sleep')}>Cancel</button>
+              </div>
+              
+            </form>
+        )}
   </div>
+  <div className="WaterSection-container">
+  <h3>Water</h3>
+  {!showForm ? (
+    <div className="water-header">
+      <button className="plusWater" onClick={handleToggleFormWater}> + </button>
+      {totalWaterAmount && (
+        <p className="total-water-amount">Total water amount: {totalWaterAmount}ml</p>
+      )}
+    </div>
+  ) : (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <div className="water-buttons">
+        <button className="water-amount" onClick={() => handleLogWaterEntry(250)}>
+          250ml
+        </button>
+        <button className="water-amount" onClick={() => handleLogWaterEntry(500)}>
+          500ml
+        </button>
+        <button className="water-amount" onClick={() => handleLogWaterEntry(750)}>
+          750ml
+        </button>
+      </div>
+      <button className="cancel" onClick={handleToggleFormWater}>
+        Cancel
+      </button>
+    </form>
+  )}
+</div>
+
+
+
 </div>
 );
 
 };
 
 export default Dashboard;
+export const handleSubmit = () => { };

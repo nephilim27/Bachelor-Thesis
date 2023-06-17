@@ -30,9 +30,9 @@ public class WorkoutEntryService implements EntryService<WorkoutEntry> {
         WorkoutEntry newEntry = new WorkoutEntry();
 
         newEntry.setType(EntryType.WORKOUT);
-        newEntry.setCaloriesBurnt(newEntry.getCaloriesBurnt());
-        newEntry.setCategory(newEntry.getCategory());
-        newEntry.setDuration(newEntry.getDuration());
+        newEntry.setCaloriesBurnt(entry.getCaloriesBurnt());
+        newEntry.setCategory(entry.getCategory());
+        newEntry.setDuration(entry.getDuration());
 
         var user = userRepository.findById(userId).orElseThrow();
         newEntry.setUser(user);

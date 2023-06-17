@@ -25,9 +25,14 @@ public class WaterEntryService implements EntryService<WaterEntry> {
 
     @Override
     public WaterEntry addEntry(WaterEntry entry, Integer userId) {
-        entry.setType(EntryType.WATER);
+        WaterEntry newEntry = new WaterEntry();
+        newEntry.setType(EntryType.WATER);
+        newEntry.setAmount(entry.getAmount());
+
         var user = userRepository.findById(userId).orElseThrow();
-        entry.setUser(user);
-        return waterEntryRepository.save(entry);
+        newEntry.setUser(user);
+
+        waterEntryRepository.save(newEntry);
+        return newEntry;
     }
 }

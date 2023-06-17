@@ -1,6 +1,7 @@
 package com.example.final_exam_backend.services;
 
 import com.example.final_exam_backend.models.EntryType;
+import com.example.final_exam_backend.models.FoodEntry;
 import com.example.final_exam_backend.models.SleepEntry;
 import com.example.final_exam_backend.repos.SleepEntryRepository;
 import com.example.final_exam_backend.repos.UserRepository;
@@ -26,9 +27,12 @@ public class SleepEntryService implements EntryService<SleepEntry> {
 
     @Override
     public SleepEntry addEntry(SleepEntry entry, Integer userId) {
-        entry.setType(EntryType.SLEEP);
+        SleepEntry newEntry = new SleepEntry();
+        newEntry.setType(EntryType.SLEEP);
+        newEntry.setDuration(entry.getDuration());
         var user = userRepository.findById(userId).orElseThrow();
-        entry.setUser(user);
-        return sleepentryRepository.save(entry);
+        newEntry.setUser(user);
+        sleepentryRepository.save(newEntry);
+        return newEntry;
     }
 }

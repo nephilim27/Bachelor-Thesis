@@ -1,7 +1,6 @@
 import Navbar from "./Navbar"
 import Dashboard from "./pages/Dashboard"
 import Home from "./pages/Home"
-import AboutUs from "./pages/AboutUs"
 import Profile from "./pages/Profile"
 import {Navigate, Route, Routes} from "react-router-dom"
 import Register from "./pages/OnboardingForm";
@@ -24,6 +23,7 @@ import CaliforniaRollSalad from "./meals/CaliforniaRollSalad"
 import Shakshuka from "./meals/Shakshuka"
 
 import React, { useState } from 'react';
+import Statistics from "./pages/Statistics"
 
 function App() {
 
@@ -40,8 +40,8 @@ function App() {
                 authenticated &&
                 <>
                     <Route exact path="/dashboard" element={<Dashboard />} />
+                    <Route exact path="/statistics" element={<Statistics />} />
                     <Route exact path="/meals" element={<Meals />} />
-                    <Route exact path="/aboutus" element={<AboutUs />} />
                     <Route exact path="/profile" element={<Profile />} />
 
                     <Route exact path="/salmongreenbeans" element={<SalmonGreenBeans />} />

@@ -15,13 +15,118 @@ body {
   background-color: #4caf50;
   color: white;
   display: flex;
-  justify-content: space-between;
   align-items: stretch;
-  gap: 3rem;
   padding: 0 1rem;
   height: 3.5vw;
-  justify-content: center;
 }
+
+.appLogo {
+  height: 55px;
+  width: 55px;
+  margin-right: 380px;
+  margin-left: -19px;
+}
+
+ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+.authButtons {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profilePic {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.logout {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* Additional styles for navigation links */
+li {
+  margin-right: 1rem;
+}
+
+.active {
+  font-weight: bold;
+}
+
+
+.slogan {
+  margin-top: 50px;
+}
+
+.slogan h1 {
+  color: #555;
+  font-weight: bold;
+}
+
+.highlight {
+  color: #4caf50; 
+  font-weight: bold; 
+}
+
+.subtitle {
+  color: #888;
+  margin-top: -10px;
+}
+
+.googleApple {
+  height: 200px;
+  width: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.box-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.box {
+  flex: 1;
+  background-color: #f1f1f1;
+  padding: 20px;
+  margin: 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.box img {
+  width: 50px; 
+  height: 50px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.box h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.box p {
+  font-size: 14px;
+}
+
+
 
 .home-title {
   font-size: 2rem;
@@ -197,7 +302,7 @@ button:hover {
 
 .section-container {
   display: flex;
-  flex-direction: flex;
+  flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
   border: 1px solid #ccc;
@@ -257,15 +362,34 @@ button {
   margin-left: 70px;
 }
 
+.circle-container-orange {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid orange;
+  margin-left: 70px;
+}
+
+.circle-container-red {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid red;
+  margin-left: 70px;
+}
+
 .remaining-calories {
   font-size: 16px;
   text-align: center;
   color: black;
 }
 
-.circle-container.decreasing-border {
-  border-width: calc(5px * (1 - remainingCalories / calorieBudget));
-}
 
 #date {
   margin-left: 100px;
@@ -276,7 +400,7 @@ button {
 .FoodLog-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .foodButtons {
@@ -286,6 +410,18 @@ button {
   justify-content: center;
 }
 
+.section-container > button.plusB {
+  margin-left: auto;
+  align-self: flex-end;
+}
+
+.plusL {
+  align-items: end;
+}
+
+.plusD {
+  align-items: end;
+}
 .WorkoutSection-container {
   position: absolute;
   top: 100px;
@@ -327,6 +463,57 @@ button {
   width: 100px;
   margin-left: 10px;
 }
+
+.WaterSection-container {
+  position: absolute;
+  top: 400px;
+  left: 20px;
+  margin: 20px;
+  border: 1px solid #ccc;
+  width: 450px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.total-water-amount {
+  margin-left: -100px;
+  font-weight: bold;
+}
+
+.water-entry-form {
+  margin-top: 10px;
+}
+
+.water-entry-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.water-entry-form input[type="number"] {
+  width: 100px;
+}
+
+.water-entry-form button {
+  margin-top: 10px;
+}
+
+.water-amounts {
+  display: flex;
+  margin-top: 20px;
+}
+
+.water-amounts button {
+  margin-right: 10px;
+}
+
+.water-log-button {
+  margin-top: 10px;
+}
+
+
+
 
 .SleepSection-container {
   position: absolute;
@@ -416,3 +603,51 @@ button {
   flex-direction: row;
   justify-content: center;
 }
+
+.food-name {
+  margin-right: 8px; /* Adjust the spacing as needed */
+}
+
+.log-food-btn {
+  margin-left: 8px; /* Adjust the spacing as needed */
+  width: 50px;
+  height: 30px;
+  font-size: x-small;
+  text-align: start;
+}
+
+.foodEntries {
+  display: absolute;
+  align-items: start;
+}
+
+
+.foodEntry {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.entryName {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.entryCalories {
+  color: #888;
+  margin-right: 20px;
+}
+
+.delEntry {
+  width: 3cap;
+  height: 30px;
+  font-size: small;
+  text-align: center;
+  background-color:#e53935;
+}
+
+
