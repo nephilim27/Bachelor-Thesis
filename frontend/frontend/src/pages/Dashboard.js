@@ -32,6 +32,37 @@ const Dashboard = ( ) => {
   // Determine the class for the circle container based on the overage
   const circleContainerClass = overage > 500 ? 'circle-container-red' : overage > 0 && overage < 500 ? 'circle-container-orange' : 'circle-container';
 
+  function sendOverageToBackend() {
+  
+    fetch(`http://localhost:8080/api/overage?userId=${onBoardedUser.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ overage }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('Overage sent to the backend');
+        } else {
+          console.error('Failed to send overage to the backend');
+        }
+      })
+      .catch((error) => {
+        console.error('Error sending overage to the backend:', error);
+      });
+  }
+  
+  // Calculate the time until 11:59 PM
+  const now = new Date();
+  const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 0);
+  const timeUntilTarget = targetTime.getTime() - now.getTime();
+  
+  // Schedule the sending of the 'overage' value at 11:59 PM
+  setTimeout(sendOverageToBackend, timeUntilTarget);
+  
+
+
   const [breakfastName, setBreakfastName] = useState('');
   const [breakfastCalories, setBreakfastCalories] = useState('');
   const [showBreakfastForm, setShowBreakfastForm] = useState(false);
