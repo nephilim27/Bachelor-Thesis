@@ -30,9 +30,4 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public boolean checkUserExistsByAccessToken(String accessToken) {
-        return userRepository.existsByAccessToken(accessToken);
-    }
-
-
 }

@@ -3,13 +3,12 @@ package com.example.final_exam_backend.controllers;
 import com.example.final_exam_backend.models.*;
 import com.example.final_exam_backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +40,17 @@ public class EntryController {
     public List<FoodEntry> getFoodEntries(@RequestParam(value = "userId") Integer userId) {
         return foodEntryService.getEntries(userId);
     }
+
+    @GetMapping("/food/last30days")
+    public List<FoodEntry> getFoodEntriesForLast30Days(@RequestParam(value = "userId") Integer userId) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate thirtyDaysAgo = currentDate.minusDays(30);
+        Date startDate = java.sql.Date.valueOf(thirtyDaysAgo);
+        Date endDate = java.sql.Date.valueOf(currentDate);
+
+        return foodEntryService.getEntriesByDateRange(userId, startDate, endDate);
+    }
+
 
     @GetMapping("/foodsOnGivenDay")
     public List<FoodEntry> getFoodEntriesOnGivenDay(@RequestParam(value = "userId") Integer userId) {
@@ -81,8 +91,6 @@ public class EntryController {
                 })
                 .collect(Collectors.toList());
     }
-
-
 
 
     @PostMapping("/food")

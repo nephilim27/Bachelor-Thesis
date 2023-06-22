@@ -67,7 +67,6 @@ export default function Home() {
     // Check user existence when the component mounts
     if (authenticated && profile.email) {
       checkUserExistence();
-      console.log(profile.email);
     }
   }, [authenticated, profile.email]);
 
@@ -105,7 +104,7 @@ export default function Home() {
           )}
         </>
       )}
-      {!authenticated && <p>Sorry, not authorized! Please Login!</p>}
+      {!authenticated && <h2>Sorry, not authorized! Please Login!</h2>}
     </>
   );
 }

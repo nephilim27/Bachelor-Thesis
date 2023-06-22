@@ -4,7 +4,7 @@ import { useAuthentication } from '../providers/AuthProvider';
 function Profile() {
   const [editMode, setEditMode] = useState(false);
   const [calorieBudget, setCalorieBudget] = useState(0);
-  const { profile, onBoardedUser, setOnBoardedUserState } = useAuthentication();
+  const { profile, onBoardedUser, setOnBoardedUser } = useAuthentication();
 
   const handleEditProfile = () => {
     setEditMode(!editMode);
@@ -31,7 +31,7 @@ function Profile() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setOnBoardedUserState((prevUser) => ({ ...prevUser, [name]: value }));
+    setOnBoardedUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
   
 
@@ -63,7 +63,7 @@ function Profile() {
             />
             <input
               type="number"
-              name="startWight"
+              name="startWeight"
               value={onBoardedUser.startWeight}
               onChange={handleInputChange}
             />

@@ -23,34 +23,16 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
-//    @GetMapping("/access-token")
-//    public ResponseEntity<String> getAccessToken(HttpServletRequest request) {
-//        // Retrieve the access token from the session
-//        HttpSession session = request.getSession(false);
-//        if (session != null) {
-//            String accessToken = (String) session.getAttribute("accessToken");
-//            if (accessToken != null) {
-//                // User is logged in, return the access token
-//                return ResponseEntity.ok(accessToken);
-//            }
-//        }
-//
-//        // User is not logged in or access token not found, return an error response
-//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access token not found");
-//    }
-//    @GetMapping("/checkUserExistence")
-//    public ResponseEntity<?> checkUserExistence(@RequestParam("email") String email) {
-//        try {
-//            boolean userExists = userRepository.existsByEmail(email);
-//
-//            // Send the response
-//            return ResponseEntity.ok().body(userExists);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(500).body("Internal Server Error");
-//        }
-//    }
+    @GetMapping("/onboarding/userByEmail")
+    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+        User user = userRepository.findByEmail(email);
 
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(user);
+    }
 
     @GetMapping("/onboarding")
     private List<User> getAllUsers() {
@@ -110,29 +92,6 @@ public class UserController {
         boolean exists = user != null;
         return ResponseEntity.ok().body(exists);
     }
-
-    private final RestTemplate restTemplate;
-
-    public UserController(RestTemplateBuilder restTemplateBuilder) {
-        this.restTemplate = restTemplateBuilder.build();
-    }
-
-//    private boolean checkEmailExists(String email) {
-//        List<User> users = existingApiCallToCheckEmailExists(email);
-//        return !users.isEmpty();
-//    }
-
-    private List<User> existingApiCallToCheckEmailExists(String email) {
-        ResponseEntity<List<User>> response = restTemplate.exchange(
-                "http://localhost:8080/onboarding",
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<>() {
-                }
-        );
-        return response.getBody();
-    }
-
 
 
     private boolean isValidUser(User user) {

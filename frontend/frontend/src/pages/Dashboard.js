@@ -84,7 +84,6 @@ const Dashboard = ( ) => {
   const handleSubmit = async (e, section) => {
     e.preventDefault();
 
-    try {
       const userId = onBoardedUser.id;
       let entry = {};
 
@@ -95,6 +94,10 @@ const Dashboard = ( ) => {
             calories: parseInt(breakfastCalories),
             mealType: 'breakfast',
           };
+          const resB = await handleFoodAdding(userId, entry);
+          if(resB) {
+            setBreakfastEntries([...breakfastEntries, entry]);
+          }
           break;
         case 'lunch':
           entry = {
@@ -102,6 +105,10 @@ const Dashboard = ( ) => {
             calories: parseInt(lunchCalories),
             mealType: 'lunch',
           };
+          const resL = await handleFoodAdding(userId, entry);
+          if(resL) {
+            setLunchEntries([...lunchEntries, entry]);
+          }
           break;
         case 'dinner':
           entry = {
@@ -109,6 +116,10 @@ const Dashboard = ( ) => {
             calories: parseInt(dinnerCalories),
             mealType: 'dinner',
           };
+          const resD = await handleFoodAdding(userId, entry);
+          if(resD) {
+            setDinnerEntries([...dinnerEntries, entry]);
+          }
           break;
         case 'snack':
           entry = {
@@ -116,23 +127,93 @@ const Dashboard = ( ) => {
             calories: parseInt(snackCalories),
             mealType: 'snack',
           };
+          const resS = await handleFoodAdding(userId, entry);
+          if(resS) {
+            setSnackEntries([...snackEntries, entry]);
+          }
           break;
         default:
           return;
       }
+      setConsumedCalories(consumedCalories + entry.calories);
+  };
 
+  //Get BreakfastEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=breakfast`)
+    .then((response) => response.json())
+    .then((data) => {
+      setBreakfastEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get LunchEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=lunch`)
+    .then((response) => response.json())
+    .then((data) => {
+      setLunchEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get DinnerEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=dinner`)
+    .then((response) => response.json())
+    .then((data) => {
+      setDinnerEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get SnackEntries
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsByType?userId=${onBoardedUser.id}&type=snack`)
+    .then((response) => response.json())
+    .then((data) => {
+      setSnackEntries(data);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]); 
+
+//Get all FoodEntries on current day
+useEffect(() => {
+  fetch(`http://localhost:8080/api/entries/foodsOnGivenDay?userId=${onBoardedUser.id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      setFoodEntries(data);
+      
+      // Calculate total calories
+      const totalCalories = data.reduce((total, entry) => total + entry.calories, 0);
+      setConsumedCalories(totalCalories);
+    })
+    .catch((error) => {
+      console.error('Error fetching food entries:', error);
+    });
+}, [onBoardedUser.id]);
+
+
+  const handleFoodAdding = async (userId, entry) => {
+    try {
       const response = await axios.post(
         `http://localhost:8080/api/entries/food?user=${userId}`, entry
       );
-
-      console.log('Food entry added:', response.data);
-      alert('Food entry added');
-      setConsumedCalories(consumedCalories + entry.calories);
-    } catch (error) {
-      console.error('Error adding food entry:', error);
-      alert('Error adding food entry');
+      return true;
     }
-  };
+    catch(error){
+      return false;
+    }
+  }
 
   const handleToggleForm = (section) => {
     switch (section) {
@@ -169,9 +250,10 @@ const Dashboard = ( ) => {
       const response = await axios.post(
         `http://localhost:8080/api/entries/workout?user=${userId}`, entry
       );
+
+      setWaterEntries([...workoutEntries, entry]);
   
       console.log('Workout entry added:', response.data);
-      alert('Workout entry added');
     } catch (error) {
       console.error('Error adding workout entry:', error);
       alert('Error adding workout entry');
@@ -232,13 +314,23 @@ const handleSubmitSleep = async (e) => {
       entry
     );
 
+    setSleepEntries([...sleepEntries, entry]);
+
     console.log('Sleep entry added:', response.data);
-    alert('Sleep entry added');
     // Perform any necessary state updates or calculations
   } catch (error) {
     console.error('Error adding sleep entry:', error);
     alert('Error adding sleep entry');
   }
+};
+
+// Function to add a new entry to breakfastEntries
+const addBreakfastEntry = async (entry) => {
+  const resB = await handleFoodAdding(onBoardedUser.id, entry);
+    if(resB) {
+      setBreakfastEntries([...breakfastEntries, entry]);
+    }
+  console.log("foodEntries updated", entry.id);
 };
 
 //Get BreakfastEntries
@@ -372,13 +464,15 @@ useEffect(() => {
 
 const handleDeleteEntry = (entryId) => {
   // Send a DELETE request to the API endpoint
-  fetch(`http://localhost:8080/api/entries/${entryId}`, {
+  fetch(`http://localhost:8080/api/entries/food/${entryId}`, {
     method: 'DELETE'
   })
   .then((response) => {
     if (response.ok) {
       // If the deletion is successful, remove the entry from the screen
-      setFoodEntries((prevEntries) => prevEntries.filter(entry => entry.id !== entryId));
+      const resultSet = breakfastEntries.filter(entry => entry.id !== entryId);
+      setBreakfastEntries(resultSet);
+      // setFoodEntries((prevEntries) => prevEntries.filter(entry => entry.id !== entryId));
     } else {
       console.error('Error deleting food entry');
     }
@@ -402,9 +496,10 @@ const handleLogWaterEntry = async (amount) => {
       `http://localhost:8080/api/entries/water?user=${userId}`,
       entry
     );
+    
+    setWaterEntries([...waterEntries, entry]);
 
     console.log('Water entry added:', response.data);
-    alert('Water entry added');
   } catch (error) {
     console.error('Error adding water entry:', error);
     alert('Error adding water entry');
@@ -420,7 +515,6 @@ const handleToggleFormWater = () => {
   setShowForm(!showForm);
   setSelectedAmount(null);
 };
-
 
 
 return (
@@ -451,10 +545,11 @@ return (
     <div className='FoodLog-container'>
     <div className="section-row">
       <div className="section-container">
-        <h3>Breakfast</h3>
-        {!showBreakfastForm ? (
-          <div>
+        <div className='controlHeader'>
+          <h3>Breakfast</h3>
           <button className='plusB' onClick={() => handleToggleForm('breakfast')}>+</button>
+        </div>
+        {!showBreakfastForm ? (
           <div className='foodEntries'>
             {breakfastEntries.map((entry) => (
               <div key={entry.id} className='foodEntry'>
@@ -463,14 +558,12 @@ return (
                 <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
               </div>
             ))}
-          </div>
- 
           
   </div>
         ) : (
           <div className='breakfastForms'>
             <h2> Log food:</h2>
-          <FoodSearch section={'breakfast'}/>
+            <FoodSearch section="breakfast" addEntry={addBreakfastEntry} />
 
           <br />
           <h2> Log Custom food:</h2>
@@ -506,11 +599,11 @@ return (
       </div>
 
       <div className="section-container">
+        <div className='controlHeader'>
         <h3>Lunch</h3>
+        <button className='plusL' onClick={() => handleToggleForm('lunch')}>+</button>
+        </div>
         {!showLunchForm ? (
-        <div>
-          <button className='plusL' onClick={() => handleToggleForm('lunch')}>+</button>
-
           <div className='foodEntries'>
             {lunchEntries.map((entry) => (
               <div key={entry.id} className='foodEntry'>
@@ -520,8 +613,8 @@ return (
               </div>
             ))}
           </div>
-        </div>
-        ) : (
+        ) :
+         (
           <div className='lunchForms'>
             <h2> Log food:</h2>
           <FoodSearch section={'lunch'}/>
@@ -561,11 +654,11 @@ return (
 
     <div className="section-row">
       <div className="section-container">
+      <div className='controlHeader'>
         <h3>Dinner</h3>
+        <button className='plusD' onClick={() => handleToggleForm('dinner')}>+</button>
+      </div>
         {!showDinnerForm ? (
-          <div>
-            <button className='plusD' onClick={() => handleToggleForm('dinner')}>+</button>
-
             <div className='foodEntries'>
               {dinnerEntries.map((entry) => (
                 <div key={entry.id} className='foodEntry'>
@@ -575,7 +668,6 @@ return (
                 </div>
               ))}
             </div>
-          </div>
         ) : (
           <div className='dinnerForms'>
             <h2> Log food:</h2>
@@ -611,11 +703,11 @@ return (
       </div>
 
       <div className="section-container">
+      <div className='controlHeader'>
         <h3>Snack</h3>
+        <button onClick={() => handleToggleForm('snack')}>+</button>
+      </div>
         {!showSnackForm ? (
-          <div>
-          <button onClick={() => handleToggleForm('snack')}>+</button>
-
           <div className='foodEntries'>
             {snackEntries.map((entry) => (
               <div key={entry.id} className='foodEntry'>
@@ -625,7 +717,6 @@ return (
               </div>
             ))}
           </div>
-        </div>
         ) : (
           <div className='snackForms'>
             <h2> Log food:</h2>
@@ -662,10 +753,11 @@ return (
     </div>
   </div>
   <div className="WorkoutSection-container">
+    <div className='controlHeader'>
       <h3>Workout</h3>
+      <button className='plusWorkout' onClick={() => handleToggleFormWorkout('workout')}>+</button>
+    </div>
       {!showWorkoutForm ? (
-        <div>
-        <button className='plusWorkout' onClick={() => handleToggleFormWorkout('workout')}>+</button>
         <div className='foodEntries'>
             {workoutEntries.map((entry) => (
               <div key={entry.id} className='foodEntry'>
@@ -675,7 +767,6 @@ return (
                 <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
               </div>
             ))}
-          </div>
           </div>
         ) : (
           <form
@@ -719,10 +810,11 @@ return (
   </div>
 
   <div className='SleepSection-container'>
+  <div className='controlHeader'>
     <h3>Sleep</h3>
-        {!showSleepForm ? (
-          <div>
-          <button className='plusSleep' onClick={() => handleToggleFormSleep('sleep')}>+</button>
+    <button className='plusSleep' onClick={() => handleToggleFormSleep('sleep')}>+</button>
+  </div>
+        {!showSleepForm ? ( 
           <div className='foodEntries'>
             {sleepEntries.map((entry) => (
               <div key={entry.id} className='foodEntry'>
@@ -730,7 +822,6 @@ return (
                 <button className='delEntry' onClick={() => handleDeleteEntry(entry.id)}>Del</button>
               </div>
             ))}
-          </div>
           </div>
           ) : (
             <form
@@ -759,9 +850,8 @@ return (
   {!showForm ? (
     <div className="water-header">
       <button className="plusWater" onClick={handleToggleFormWater}> + </button>
-      {totalWaterAmount && (
         <p className="total-water-amount">Total water amount: {totalWaterAmount}ml</p>
-      )}
+        <p className="recommended-water-amount">You shold drink {onBoardedUser.waterIntake} ml/day</p>
     </div>
   ) : (
     <form onSubmit={(e) => e.preventDefault()}>
@@ -792,3 +882,10 @@ return (
 
 export default Dashboard;
 export const handleSubmit = () => { };
+
+export const breakfastEntries = [];
+export const setBreakfastEntries = (entries) => {
+  breakfastEntries = [...breakfastEntries, ...entries];
+};
+
+

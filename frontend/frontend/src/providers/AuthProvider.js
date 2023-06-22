@@ -65,18 +65,23 @@ export const AuthProvider = ({
             .catch((err) => console.log(err));
     }, [authenticated]);
 
+
     useEffect(() => {
-        fetch(`http://localhost:8080/onboarding?timestamp=${Date.now()}`)
-          .then((response) => response.json())
-          .then((data) => {
-            setUserData(data[0]);
-            setOnBoardedUser(data[0]);
-            setProfile(data[0]);
-          })
-          .catch((error) => {
-            console.error('Error retrieving user data:', error);
-          });
-      }, []);
+        if (authenticated) {
+          fetch(`http://localhost:8080/onboarding/userByEmail?email=${profile.email}`)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data && typeof data === 'object') {
+                setUserData(data);
+                setOnBoardedUser(data);
+              }
+            })
+            .catch((error) => {
+              console.error('Error retrieving user data:', error);
+            });
+        }
+      }, [authenticated, profile.email]);
+      
 
     return (
         <AuthContext.Provider value={{
@@ -86,6 +91,7 @@ export const AuthProvider = ({
             login:login,
             user: user,
             onBoardedUser: onBoardedUser,
+            setOnBoardedUser: setOnBoardedUser,
             profile: profile,
             onboardingCompleted: onboardingCompleted
         }}>

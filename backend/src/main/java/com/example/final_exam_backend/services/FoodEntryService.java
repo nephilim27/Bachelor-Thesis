@@ -2,16 +2,15 @@ package com.example.final_exam_backend.services;
 
 import com.example.final_exam_backend.models.EntryType;
 import com.example.final_exam_backend.models.FoodEntry;
-import com.example.final_exam_backend.models.Foods;
 import com.example.final_exam_backend.repos.FoodEntryRepository;
 import com.example.final_exam_backend.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FoodEntryService implements EntryService<FoodEntry> {
@@ -41,6 +40,19 @@ public class FoodEntryService implements EntryService<FoodEntry> {
         foodEntryRepository.save(newEntry);
         return newEntry;
     }
+
+    public List<FoodEntry> getEntriesByDateRange(Integer userId, Date startDate, Date endDate) {
+        // Retrieve the food entries for the specified user and date range
+        List<FoodEntry> entries = foodEntryRepository.findByUserIdAndConsumedAtBetween(userId, startDate, endDate);
+
+        // If no entries found, return an empty list
+        if (entries == null) {
+            return new ArrayList<>();
+        }
+
+        return entries;
+    }
+
 
     public void deleteEntry(Integer id) {
         foodEntryRepository.deleteById(id);

@@ -302,9 +302,8 @@ button:hover {
 
 .section-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between;
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 20px;
@@ -410,10 +409,6 @@ button {
   justify-content: center;
 }
 
-.section-container > button.plusB {
-  margin-left: auto;
-  align-self: flex-end;
-}
 
 .plusL {
   align-items: end;
@@ -466,7 +461,7 @@ button {
 
 .WaterSection-container {
   position: absolute;
-  top: 400px;
+  top: 580px;
   left: 20px;
   margin: 20px;
   border: 1px solid #ccc;
@@ -480,6 +475,9 @@ button {
 .total-water-amount {
   margin-left: -100px;
   font-weight: bold;
+}
+.recommended-water-amount {
+  margin-left: -100px;
 }
 
 .water-entry-form {
@@ -577,8 +575,11 @@ button {
 }
 
 .ingList {
+  display: flex;
+  flex-direction: column;
   text-align: left;
   margin-left: 50px;
+  list-style-type: disc;
   padding-left: 0;
 }
 
@@ -616,11 +617,6 @@ button {
   text-align: start;
 }
 
-.foodEntries {
-  display: absolute;
-  align-items: start;
-}
-
 
 .foodEntry {
   display: flex;
@@ -632,6 +628,12 @@ button {
   margin-bottom: 10px;
 }
 
+.section-container > button.plusB {
+  margin-left: auto;
+  align-self: flex-end;
+}
+
+
 .entryName {
   font-weight: bold;
   margin-right: 10px;
@@ -642,6 +644,14 @@ button {
   margin-right: 20px;
 }
 
+.controlHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  /* border: 1px solid; */
+  width: 100%;
+}
 .delEntry {
   width: 3cap;
   height: 30px;
@@ -649,5 +659,47 @@ button {
   text-align: center;
   background-color:#e53935;
 }
+
+.statistics-container {
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.statistics-heading {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.statistics {
+  display: flex;
+  flex-direction: column;
+}
+
+.statistics-item {
+  margin-bottom: 10px;
+}
+
+.days-exceeded {
+  font-weight: bold;
+}
+
+.days-exceeded.green {
+  color: green;
+}
+
+.days-exceeded.orange {
+  color: orange;
+}
+
+.days-exceeded.red {
+  color: red;
+}
+
+.chart-container {
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+
 
 

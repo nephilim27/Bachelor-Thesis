@@ -12,9 +12,6 @@ public class Entry {
     @Enumerated(EnumType.STRING)
     private EntryType type;
 
-//    @Column(nullable = false)
-//    private LocalDateTime date;
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;

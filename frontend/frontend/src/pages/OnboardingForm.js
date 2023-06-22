@@ -1,7 +1,8 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import Home from './Home';
 
-export default function OnboardingForm({ onSubmit, user }) {
+export default function OnboardingForm() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [height, setHeight] = useState('');
@@ -14,57 +15,43 @@ export default function OnboardingForm({ onSubmit, user }) {
   const [birthDate, setBirthDate] = useState('');
   const [activityLevel, setActivityLevel] = useState('');
   const [weeklyGoal, setWeeklyGoal] = useState('');
+  const [submitted, setSubmitted] = useState(false); // State to track form submission
 
-  useEffect(() => {
-    if (user && user.accessToken) {
-      // User exists, fetch the user data and populate the form fields
-      fetchUserData(user.accessToken);
-    }
-  }, [user]);
-
-  const fetchUserData = (accessToken) => {
-    axios
-      .get(`http://localhost:8080/onboarding`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((response) => {
-        const userData = response.data;
-  
-        // Populate the form fields with the retrieved user data
-        setName(userData.name);
-        setEmail(userData.email);
-        // Set other form state variables
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // Prepare the form data object
+    console.log('Handle submit called'); // Add this line
+  
+    // Prepare the form data
     const formData = {
       name,
       email,
-      // other form state variables...
+      height: parseFloat(height),
+      currentWeight: parseFloat(currentWeight),
+      startWeight: parseFloat(startWeight),
+      goalWeight: parseFloat(goalWeight),
+      goalDate,
+      sex,
+      age: parseInt(age),
+      birthDate,
+      activityLevel,
+      weeklyGoal: parseInt(weeklyGoal),
     };
-
-    // Pass the form data to the onSubmit callback
-    onSubmit(formData);
+  
+    axios.post('http://localhost:8080/onboarding', formData)
+  .then((response) => {
+    console.log('User registered successfully:', response.data);
+    setSubmitted(true); // Set the submitted state to true upon successful submission
+  })
+  .catch((error) => {
+    console.error('Error registering user:', error);
+  });
   };
-
-  if (user && user.accessToken) {
-    // If the user exists and has an access token, skip the form and display a message
-    return <div>You are already registered.</div>;
+  
+  // Render the Home component if form is successfully submitted
+  if (submitted) {
+    return <Home />;
   }
-
-  // Render the form if the user doesn't have an access token
-
 
   return (
     <form onSubmit={handleSubmit}>
@@ -120,3 +107,4 @@ export default function OnboardingForm({ onSubmit, user }) {
     </form>
   );
 }
+
